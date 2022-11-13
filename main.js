@@ -1,22 +1,49 @@
 document.addEventListener("DOMContentLoaded", () => {
-    createWord();
-    createWordChoices(["I love pizza", "Ice cream is greater"]);
+    let word = "Pizza";
+    let definitions = ["a dish of Italian origin consisting of a flat, round base of dough baked with a topping of tomato sauce and cheese, typically with added meat or vegetables.","food made of flour, water, and yeast or another leavening agent, mixed together and baked."];
+    let definition = "a dish of Italian origin consisting of a flat, round base of dough baked with a topping of tomato sauce and cheese, typically with added meat or vegetables.";
 
-    function createWord() 
+    const definitionChoiceContainer = document.getElementById("definition-choices-container");
+
+    createWord(word);
+    createDefinitionChoices(definitions);
+
+    function createWord(word) 
     {
         let wordText = document.getElementById("word");
-        wordText.textContent = "Pizza";
+        wordText.textContent = word;
     }
-    function createWordChoices(wordChoices) 
+    function createDefinitionChoices(definitionChoices) 
     {
-        const wordChoiceContainer = document.getElementById("word-choices-container");
+        for (let index = 0; index < definitionChoices.length; index++) {
+            let definitionChoiceButton = document.createElement("button");
+            definitionChoiceButton.classList.add("definition-choice");
+            definitionChoiceButton.classList.add("animate__animated");
+            // definitionChoiceButton.classList.add("animate__backOutRight");
+            definitionChoiceButton.setAttribute("id", index + 1);
+            definitionChoiceButton.setAttribute("data-definition", definitionChoices[index]);
+            definitionChoiceButton.textContent = definitionChoices[index];
+            definitionChoiceContainer.append(definitionChoiceButton);
+        }
+    }
+    function handleSubmitDefinition(definitionChoice) {
+        if (definitionChoice == definition) {
+            window.alert("Congratualations!");
+        }
+        else {
+            let x = `[data-definition="${definition}]`;
+            let incorrectDefinitionButton = document.querySelector(`[data-definition="${definitionChoice}"]`);
+            incorrectDefinitionButton.classList.add("animate__backOutRight"); 
+            incorrectDefinitionButton.style = "background-color: red";
+        }
 
-        for (let index = 0; index < wordChoices.length; index++) {
-            let wordChoiceButton = document.createElement("button");
-            wordChoiceButton.classList.add("word-choice");
-            wordChoiceButton.setAttribute("id", index + 1);
-            wordChoiceButton.textContent = wordChoices[index];
-            wordChoiceContainer.append(wordChoiceButton);
+    }
+
+    for (let index = 0; index < definitionChoiceContainer.children.length; index++) {
+        definitionChoiceContainer.children[index].onclick = ({ target }) => {
+            let definitionChoice = target.getAttribute("data-definition");
+            handleSubmitDefinition(definitionChoice);
+            return;
         }
     }
 })
